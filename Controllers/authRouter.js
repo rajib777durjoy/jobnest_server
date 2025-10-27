@@ -57,8 +57,8 @@ authRoute.post('/submitFrom', upload.single('profile'), async (req, res) => {
     const createUser = await db.insert(users_schema).values({
         name,
         email,
-        password:hashPass,
-        profile:photoUrl,
+        password: hashPass,
+        profile: photoUrl,
     }).returning();
 
     const token = await genToken(createUser[0]?.email);
@@ -76,9 +76,9 @@ authRoute.post('/submitFrom', upload.single('profile'), async (req, res) => {
 
 });
 
-authRoute.post('/signIn', async (req,res) => {
-    const { email,password } = req.body;
-    console.log("email::",email,password)
+authRoute.post('/signIn', async (req, res) => {
+    const { email, password } = req.body;
+    console.log("email::", email, password)
     if (!validator.isEmail(email)) {
         console.log('email is not validate::')
         return res.status(404).send({ message: 'Invalid email format' })
@@ -86,14 +86,14 @@ authRoute.post('/signIn', async (req,res) => {
 
     const user_check = await db.select().from(users_schema).where(eq(users_schema.email, email))
     if (user_check.length === 0) {
-      return res.status(403).send({ message: 'Unauthorized user' });
+        return res.status(403).send({ message: 'Unauthorized user' });
     }
-    console.log("user check::",user_check[0].password)
-    if(!user_check[0]?.password){
-     return res.status(404).send({message:'password is undifiend'})
+    console.log("user check::", user_check[0].password)
+    if (!user_check[0]?.password) {
+        return res.status(404).send({ message: 'password is undifiend' })
     }
-    const passwordCheck = await bcrypt.compare(password,user_check[0].password);
-    console.log("passwordCheck::",passwordCheck)
+    const passwordCheck = await bcrypt.compare(password, user_check[0].password);
+    console.log("passwordCheck::", passwordCheck)
     if (!passwordCheck) {
         return res.status(404).send({ message: 'Incorrect password' })
     }
@@ -109,37 +109,43 @@ authRoute.post('/signIn', async (req,res) => {
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
         maxAge: 7 * 24 * 60 * 60 * 1000,
-    }).status(200).send({ message:'true'})
+    }).status(200).send({ message: 'true' })
 
 });
 
-authRoute.post('/signOut/:email',verifyToken,async(req,res)=>{
+authRoute.post('/signOut/:email', verifyToken, async (req, res) => {
     const { email } = req.params;
     const userEmail = req.email;
 
     if (email !== userEmail) {
-        return res.status(401).send({ message:false})
+        return res.status(401).send({ message: false })
     }
- 
-    res.clearCookie("token",{
+
+    res.clearCookie("token", {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
-    }).send({ message:true});
+    }).send({ message: true });
 });
 
 
-authRoute.post('/googleSignIn',async(req,res) => {
-const {name,email,photoUrl}=req.body;
-console.log(name,email,photoUrl);
-const user_check = await db.select().from(users_schema).where(eq(users_schema.email,email));
- console.log('user check::',user_check)
- if(user_check.length > 0){
- return res.send(user_check[0])   
- }
- const createUser = await db.insert(users_schema).values({name,email,profile:photoUrl}).returning();
- console.log(createUser[0]?.email)
- const token = await genToken(createUser[0]?.email)
+authRoute.post('/googleSignIn', async (req, res) => {
+    const { name, email, photoUrl } = req.body;
+    console.log(name, email, photoUrl);
+    const user_check = await db.select().from(users_schema).where(eq(users_schema.email, email));
+    console.log('user check::', user_check)
+    if (user_check.length > 0) {
+        const token = await genToken(user_check[0]?.email)
+      return res.status(200).cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        }).send(user_check[0])
+    }
+    const createUser = await db.insert(users_schema).values({ name, email, profile: photoUrl }).returning();
+    console.log(createUser[0]?.email)
+    const token = await genToken(createUser[0]?.email)
     res.status(200).cookie("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",

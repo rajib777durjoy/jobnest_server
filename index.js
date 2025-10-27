@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import authRoute from "./Controllers/authRouter.js";
+import userRoute from "./Controllers/userRouter.js";
 dotenv.config();
 
 const app = express();
@@ -17,7 +18,7 @@ app.use(cookieParser());
 
 
 app.use('/api',authRoute);
-
+app.use('/api/user',userRoute)
 
 app.get('/',(req,res)=>{
 res.send('server is running')

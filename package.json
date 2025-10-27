@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "generat": "drizzle-kit generate",
+    "generate": "drizzle-kit generate",
     "push": "drizzle-kit push",
     "pull": "drizzle-kit pull",
     "studio": "drizzle-kit studio"

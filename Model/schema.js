@@ -5,7 +5,7 @@ const users_schema=pgTable("users_table",{
     id:serial("id").primaryKey(),
     name:varchar("name",{length:100}).notNull(),
     email:varchar("email",{length:150}).unique().notNull(),
-    password:text("password").notNull(),
+    password:text("password"),
     profile:text("profile"),
     created_date:timestamp("created_date").defaultNow()
 });

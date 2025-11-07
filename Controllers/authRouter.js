@@ -23,7 +23,7 @@ authRoute.post('/submitFrom', upload.single('profile'), async (req, res) => {
     }
 
     const user_check = await db.select().from(users_schema).where(eq(users_schema.email, email));
-    console.log('check user', user_check)
+    // console.log('check user', user_check)
     if (user_check) {
         const token = await genToken(user_check[0]?.email);
         return res.status(200).cookie("token", token, {
@@ -78,7 +78,7 @@ authRoute.post('/submitFrom', upload.single('profile'), async (req, res) => {
 
 authRoute.post('/signIn', async (req, res) => {
     const { email, password } = req.body;
-    console.log("email::", email, password)
+    // console.log("email::", email, password)
     if (!validator.isEmail(email)) {
         console.log('email is not validate::')
         return res.status(404).send({ message: 'Invalid email format' })
@@ -86,14 +86,14 @@ authRoute.post('/signIn', async (req, res) => {
 
     const user_check = await db.select().from(users_schema).where(eq(users_schema.email, email))
     if (user_check.length === 0) {
-        return res.status(403).send({ message: 'Unauthorized user' });
+        return res.status(500).send({ message: 'Unauthorized user' });
     }
-    console.log("user check::", user_check[0].password)
+    // console.log("user check::", user_check[0].password)
     if (!user_check[0]?.password) {
-        return res.status(404).send({ message: 'password is undifiend' })
+        return res.status(500).send({ message: 'password is undifiend' })
     }
     const passwordCheck = await bcrypt.compare(password, user_check[0].password);
-    console.log("passwordCheck::", passwordCheck)
+    // console.log("passwordCheck::", passwordCheck)
     if (!passwordCheck) {
         return res.status(404).send({ message: 'Incorrect password' })
     }

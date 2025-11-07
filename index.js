@@ -6,9 +6,16 @@ import cors from "cors";
 import authRoute from "./Controllers/authRouter.js";
 import userRoute from "./Controllers/userRouter.js";
 dotenv.config();
+import rateLimit from 'express-rate-limit';
 
+const limiter = rateLimit({
+  windowMs: 60 * 1000, 
+  max: 10, 
+  message: "Too many requests, please try again later."
+});
 const app = express();
 const port = process.env.PORT || 7000;
+app.use(limiter);
 app.use(cors({
     origin:['http://localhost:3000'],
     credentials:true

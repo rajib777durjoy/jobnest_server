@@ -15,6 +15,76 @@
       "when": 1761487842779,
       "tag": "0001_many_human_robot",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1761890645885,
+      "tag": "0002_clean_doorman",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1761891633132,
+      "tag": "0003_many_falcon",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1762007529819,
+      "tag": "0004_easy_pyro",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1762094659157,
+      "tag": "0005_volatile_onslaught",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1762105421896,
+      "tag": "0006_jazzy_zodiak",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1762105596041,
+      "tag": "0007_nosy_invisible_woman",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1762105781148,
+      "tag": "0008_oval_firedrake",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1762106057765,
+      "tag": "0009_solid_silhouette",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1762524877407,
+      "tag": "0010_nervous_sister_grimm",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1762525628217,
+      "tag": "0011_slim_prima",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,1 @@
+ALTER TABLE "JobCollection" DROP CONSTRAINT "JobCollection_email_unique";

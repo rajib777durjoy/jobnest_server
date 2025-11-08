@@ -7,6 +7,7 @@ import authRoute from "./Controllers/authRouter.js";
 import userRoute from "./Controllers/userRouter.js";
 dotenv.config();
 import rateLimit from 'express-rate-limit';
+import JobRouter from "./Controllers/JobRouter.js";
 
 const limiter = rateLimit({
   windowMs: 60 * 1000, 
@@ -25,7 +26,8 @@ app.use(cookieParser());
 
 
 app.use('/api',authRoute);
-app.use('/api/user',userRoute)
+app.use('/api/user',userRoute);
+app.use('/api/Jobs',JobRouter)
 
 app.get('/',(req,res)=>{
 res.send('server is running')

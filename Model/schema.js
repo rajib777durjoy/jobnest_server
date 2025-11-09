@@ -37,5 +37,27 @@ export const JobCollection= pgTable('JobCollection',{
     description:text('description').notNull()
 });
 
+// fullName: 'Durjoy Chando',
+//   email: 'durjoy2001chando@gmail.com',
+//   JobTitle: 'Frontend developer',
+//   phone: '+8801922711628',
+//   loaction: 'Bangladesh,Sylhet',
+//   JobType: 'Internship',
+//   salary: '4000',
+//   description: 'I am durjoy chando . I am frontend developer .'
+export const AppliedList= pgTable('appliedList',{
+    Apply_id:serial('Apply_id').primaryKey(),
+    fullName:varchar('fullName',{length:150}),
+    email:varchar('email',{length:150}),
+    JobTitle:text('JobTitle'),
+    resume:text('resume').default(''),
+    phone:text('phone'),
+    loaction:text('loaction'),
+    JobType:text('JobType'),
+    salary:integer('salary'),
+    description:text('description'),
+    Job_id:integer('Job_id').references(()=>JobCollection.Job_id,{ onDelete: "cascade" })
+})
+
 
  

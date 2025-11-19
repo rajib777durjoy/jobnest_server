@@ -54,5 +54,11 @@ export const AppliedList= pgTable('appliedList',{
     createdAt: timestamp("createdAt").defaultNow(),
 })
 
+export const SaveJobs= pgTable('saveJobs',{
+    id:serial("id").primaryKey(),
+    createdAt: timestamp("createdAt").defaultNow(),
+    Job_id:integer('Job_id').references(()=>JobCollection.Job_id,{ onDelete: "cascade" }),
+})
+
 
  

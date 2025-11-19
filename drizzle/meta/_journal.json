@@ -127,6 +127,20 @@
       "when": 1762870908885,
       "tag": "0017_old_gamma_corps",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1763572238815,
+      "tag": "0018_rare_bulldozer",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1763573376238,
+      "tag": "0019_cold_lockjaw",
+      "breakpoints": true
     }
   ]
 }

@@ -27,7 +27,7 @@ app.use(cookieParser());
 
 app.use('/api',authRoute);
 app.use('/api/user',userRoute);
-app.use('/api/Jobs',JobRouter)
+app.use('/api/Jobs',JobRouter);
 
 app.get('/',(req,res)=>{
 res.send('server is running')

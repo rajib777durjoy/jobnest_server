@@ -1,7 +1,7 @@
 
 import express from "express";
 import db from "../lib/psqlDB.js";
-import users_schema, { AppliedList, JobCollection } from "../Model/schema.js";
+import users_schema, { AppliedList, JobCollection, SaveJobs } from "../Model/schema.js";
 import verifyToken from "./Token/verifyToken.js";
 import { and, desc, eq, ilike, inArray, sql } from "drizzle-orm";
 import { upload } from "./multer.js";
@@ -101,6 +101,18 @@ JobRouter.get('/relevantJobs',verifyToken,async(req,res)=>{
   console.log(Jobs)
   res.status(200).send(Jobs)
 
+})
+
+// Save Jobs related api functionality ///
+JobRouter.post('/savejob/:id',async(req,res)=>{
+  const id=Number(req.params?.id);
+ const query = await db.select().from(SaveJobs).where(eq(SaveJobs?.Job_id,id));
+ console.log('save job query::',query)
+ if(query.length > 0){
+  return res.status(500).send({message:'This job already saved'})
+ };
+ const saveJob= await db.insert(SaveJobs).values({Job_id:id}).returning()
+ res.send(saveJob)
 })
 
 

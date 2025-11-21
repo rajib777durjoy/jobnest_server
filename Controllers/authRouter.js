@@ -17,21 +17,23 @@ const authRoute = express.Router();
 
 authRoute.post('/submitFrom', upload.single('profile'), async (req, res) => {
     const { name, email, password } = req.body;
-
+    // console.log('fnamd',name,email,password);
+    
     if (!validator.isEmail(email)) {
         return res.status(400).send({ message: "Invalid email format!" });
     }
 
     const user_check = await db.select().from(users_schema).where(eq(users_schema.email, email));
     // console.log('check user', user_check)
-    if (user_check) {
+    if (user_check.length === 1) {
         const token = await genToken(user_check[0]?.email);
+
         return res.status(200).cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
             maxAge: 7 * 24 * 60 * 60 * 1000,
-        }).send({ message: 'Token generated successfully' });
+        }).send(user_check[0]);
     }
 
     const files = await req.file;
@@ -54,15 +56,18 @@ authRoute.post('/submitFrom', upload.single('profile'), async (req, res) => {
     if (!password) return res.status(401).send({ message: 'password is not available ' })
 
     const hashPass = await bcrypt.hash(password, 10);
+
     const createUser = await db.insert(users_schema).values({
         name,
         email,
         password: hashPass,
         profile: photoUrl,
     }).returning();
+    console.log("ceregersfsfjsu::",createUser)
 
     const token = await genToken(createUser[0]?.email);
     console.log(token)
+
     if (!token) {
         return res.status(401).send({ message: 'token generate failed' })
     }
@@ -100,6 +105,7 @@ authRoute.post('/signIn', async (req, res) => {
 
     const token = await genToken(user_check[0].email);
     console.log(token)
+
     if (!token) {
         return res.status(401).send({ message: 'token generate failed' })
     }
@@ -121,7 +127,7 @@ authRoute.post('/signOut/:email', verifyToken, async (req, res) => {
         return res.status(401).send({ message: false })
     }
 
-    res.clearCookie("token", {
+    res.clearCookie("token",{
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
@@ -132,9 +138,11 @@ authRoute.post('/signOut/:email', verifyToken, async (req, res) => {
 authRoute.post('/googleSignIn', async (req, res) => {
     const { name, email, photoUrl } = req.body;
     console.log(name, email, photoUrl);
+
     const user_check = await db.select().from(users_schema).where(eq(users_schema.email, email));
     console.log('user check::', user_check)
-    if (user_check.length > 0) {
+
+    if (user_check.length === 1) {
         const token = await genToken(user_check[0]?.email)
       return res.status(200).cookie("token", token, {
             httpOnly: true,

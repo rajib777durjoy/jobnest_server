@@ -1,21 +1,138 @@
 
 import express from "express";
+import fs from "fs";
 import verifyToken from "./Token/verifyToken.js";
 import db from "../lib/psqlDB.js";
 import users_schema, { Joblist } from "../Model/schema.js";
 import { eq } from "drizzle-orm";
 import { upload } from "./multer.js";
-import axios from "axios";
+import imagekit from "./Imagekit/imagekit.js";
 
 
 const userRoute = express.Router()
+userRoute.put('/profileUpdate', upload.fields([
+  { name: "profile", maxCount: 1 },
+  { name: "banner", maxCount: 1 },
+]), verifyToken, async (req, res) => {
+  const data = req.body;
+  const email = req.email;
+
+  if (req.files?.profile && req.files?.banner) {
+    const profile = req.files?.profile[0];
+    const banner = req.files?.banner[0];
+
+    const profileBuffer = fs.readFileSync(profile.path);
+
+    const bannerBuffer = fs.readFileSync(banner.path);
+
+    // console.log('pr', profileBuffer, 'ba', bannerBuffer)
+
+    const profileImage = await imagekit.upload({
+      file: profileBuffer,
+      fileName: profile.originalname,
+    });
+    fs.unlinkSync(profile.path)
+
+    const bannerImage = await imagekit.upload({
+      file: bannerBuffer,
+      fileName: banner.originalname,
+    });
+    fs.unlinkSync(banner.path)
+
+    const updateUser = await db
+      .update(users_schema)
+      .set({
+        name: data?.name,
+        email: data?.email,
+        title: data?.title,
+        profile: profileImage?.url,
+        banner: bannerImage?.url,
+        description: data?.description
+      })
+      .where(eq(users_schema.email, email))  // or id
+      .returning();
+    console.log('updateUser', updateUser)
+    return res.status(200).send(updateUser);
+  }
+
+  else if (req.files?.profile) {
+    const profile = req.files?.profile[0];
+    const profileBuffer = fs.readFileSync(profile.path);
+    const profileImage = await imagekit.upload({
+      file: profileBuffer,
+      fileName: profile.originalname,
+    });
+    fs.unlinkSync(profile.path);
+    const updateUser = await db
+      .update(users_schema)
+      .set({
+        name: data?.name,
+        email: data?.email,
+        title: data?.title,
+        profile: profileImage.url,
+        banner: data?.banner,
+        description: data?.description
+      })
+      .where(eq(users_schema.email, email))
+      .returning();
+    console.log('updateUser', updateUser)
+    return res.status(200).send(updateUser)
+  }
+
+  else if (req.files?.banner) {
+    const banner = req.files?.banner[0];
+    const bannerBuffer = fs.readFileSync(banner.path);
+    const bannerImage = await imagekit.upload({
+      file: bannerBuffer,
+      fileName: banner.originalname,
+    });
+    fs.unlinkSync(banner.path)
+
+    const updateUser = await db
+      .update(users_schema)
+      .set({
+        name: data?.name,
+        email: data?.email,
+        title: data?.title,
+        profile: data?.profile,
+        banner: bannerImage.url,
+        description: data?.description
+      })
+      .where(eq(users_schema.email, email))  // or id
+      .returning();
+    console.log('updateUser', updateUser)
+   return res.status(200).send(updateUser)
+
+  }
+
+  const updateUser = await db
+    .update(users_schema)
+    .set({
+      name: data?.name,
+      email: data?.email,
+      title: data?.title,
+      profile: data?.profile,
+      banner: data?.banner,
+      description: data?.description
+    })
+    .where(eq(users_schema.email, email))  // or id
+    .returning();
+  console.log('updateUser', updateUser)
+  res.status(200).send(updateUser)
+
+})
+
 
 userRoute.get('/currentUser', verifyToken, async (req, res) => {
   const user_email = req.email;
-  // console.log(user_email)
-  const getUser = await db.select().from(users_schema).where(eq(users_schema.email, user_email));
-  // console.log('currentuser::', getUser[0]);
-  res.status(200).send(getUser[0])
+  console.log(user_email)
+  if (user_email) {
+    const getUser = await db.select().from(users_schema).where(eq(users_schema.email, user_email));
+    console.log('currentuser::', getUser[0]);
+    return res.status(200).send(getUser[0])
+  }
+  res.send({ null: null })
+
 
 })
 
@@ -32,14 +149,7 @@ userRoute.post('/profile/management', verifyToken,
 
   })
 
-
-
-
-
-
-
-
-
+  
 // userRoute.post('/searchJobs', async (req, res) => {
 //   try {
 //     const query = req.query?.jobs;

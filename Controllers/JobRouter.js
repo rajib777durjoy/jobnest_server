@@ -40,12 +40,14 @@ JobRouter.get('/details/:id', async (req, res) => {
 JobRouter.post('/JobSubmitForm', verifyToken, upload.single("resume"), async (req, res) => {
   const data = req.body;
   const files = req.file;
-  const userEmail = req.email;
-
-  const checkApply = await db.select().from(AppliedList).where(and(eq(AppliedList.Job_id, data.Job_id), eq(AppliedList.email, userEmail)));
+  console.log('43 line userEmail ', data.email, req.email)
+  if (req.email !== data.email) {
+    return res.status(500).send({ message: 'Unauthorize user ' })
+  }
+  const checkApply = await db.select().from(AppliedList).where(and(eq(AppliedList.Job_id, data.Job_id), eq(AppliedList.email, data.email)));
 
   if (checkApply.length > 0) {
-    return res.status(200).send({ message: 'You already applied this position' })
+    return res.status(500).send({ message: 'You already applied this position' })
   }
 
   // convert resume file  using multer and imagekit ///
@@ -70,7 +72,7 @@ JobRouter.post('/JobSubmitForm', verifyToken, upload.single("resume"), async (re
   res.status(200).send({ success: 'Apply Successfull' });
 })
 
-//--------------- Recent Job -------------//
+//--------------- Recent Apply Job -------------//
 JobRouter.get('/Apply_jobs/:email', async (req, res) => {
   const email = req.params.email;
   // console.log("email:", email);
@@ -89,30 +91,42 @@ JobRouter.get('/applyDetails/:id', async (req, res) => {
 })
 
 // ------------------ Query for relevant Jobs -------------------//
-JobRouter.get('/relevantJobs',verifyToken,async(req,res)=>{
-  const email= req.email;
-  const userInfo= await db.select().from(users_schema).where(eq(users_schema.email,email));
-  const title=(userInfo[0].title).split(',');
+JobRouter.get('/relevantJobs', verifyToken, async (req, res) => {
+  const email = req.email;
+  const userInfo = await db.select().from(users_schema).where(eq(users_schema.email, email));
+  const title = (userInfo[0].title).split(',');
 
   const Jobs = await db
-  .select()
-  .from(JobCollection)
-  .where(inArray(JobCollection.JobTitle, title));
+    .select()
+    .from(JobCollection)
+    .where(inArray(JobCollection.JobTitle, title));
   console.log(Jobs)
   res.status(200).send(Jobs)
 
 })
 
-// Save Jobs related api functionality ///
-JobRouter.post('/savejob/:id',async(req,res)=>{
-  const id=Number(req.params?.id);
- const query = await db.select().from(SaveJobs).where(eq(SaveJobs?.Job_id,id));
- console.log('save job query::',query)
- if(query.length > 0){
-  return res.status(500).send({message:'This job already saved'})
- };
- const saveJob= await db.insert(SaveJobs).values({Job_id:id}).returning()
- res.send(saveJob)
+// Job Save related api functionality ///
+JobRouter.post('/savejob', async (req,res) => {
+  const { Job_id, user_id } = req.body;
+  if (!Job_id || !user_id) {
+    return res.status(400).send({ message: "Job_id and user_id are required" });
+  }
+  const query = await db.select().from(SaveJobs).where(and(eq(SaveJobs?.Job_id, Job_id),eq(SaveJobs?.user_id,user_id)));
+  console.log('save job query::', query)
+  if(query.length > 0) {
+    return res.status(500).send({ message: 'This job already saved' })
+  };
+  const saveJob = await db.insert(SaveJobs).values({ Job_id, user_id }).returning()
+  res.send(saveJob)
+})
+
+// Get save job list  related api functionality //
+JobRouter.get('/saveJoblist/:id',async(req,res)=>{
+  const id = req.params?.id;
+  console.log('savePagersdfsdfds;',id)
+  const query = await db.select().from(SaveJobs).where(eq(SaveJobs.user_id,id));
+  console.log('save job list::',query);
+  res.status(200).send(query);
 })
 
 

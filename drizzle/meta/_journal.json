@@ -141,6 +141,13 @@
       "when": 1763573376238,
       "tag": "0019_cold_lockjaw",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1763653316923,
+      "tag": "0020_new_shiver_man",
+      "breakpoints": true
     }
   ]
 }

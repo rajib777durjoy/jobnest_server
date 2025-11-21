@@ -1,0 +1,2 @@
+ALTER TABLE "saveJobs" ADD COLUMN "user_id" integer;--> statement-breakpoint
+ALTER TABLE "saveJobs" ADD CONSTRAINT "saveJobs_user_id_users_table_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users_table"("id") ON DELETE cascade ON UPDATE no action;

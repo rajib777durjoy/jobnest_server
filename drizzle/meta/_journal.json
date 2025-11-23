@@ -148,6 +148,27 @@
       "when": 1763653316923,
       "tag": "0020_new_shiver_man",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1763909212744,
+      "tag": "0021_greedy_lockjaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1763909386272,
+      "tag": "0022_lazy_agent_zero",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1763911729245,
+      "tag": "0023_vengeful_blacklash",
+      "breakpoints": true
     }
   ]
 }

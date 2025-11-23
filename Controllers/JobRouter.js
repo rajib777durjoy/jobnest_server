@@ -12,11 +12,21 @@ const JobRouter = express.Router()
 
 // Add job function allow for Employer not for Candidate //
 
-JobRouter.post('/Jobpost', verifyToken, async (req, res) => {
+JobRouter.post('/Jobpost', verifyToken,upload.single('logo'), async (req, res) => {
   const email = req.email;
   const data = req.body;
   const JobData = { ...data, email };
-  // console.log("data list", JobData);
+  const files = req.file;
+  if (!files) {
+    return res.status(500).send({ message: 'file is not found !' })
+  }
+  const filePath = fs.readFileSync(files.path);
+  const result = await imagekit.upload({
+    file: filePath,
+    fileName: files.originalname,
+  });
+  fs.unlinkSync(files.path)
+  JobData.logo= result?.url
   const StoreJobData = await db.insert(JobCollection).values(JobData).returning();
   //  console.log("StoreJobData",StoreJobData)
   res.send(StoreJobData)
@@ -40,12 +50,12 @@ JobRouter.get('/details/:id', async (req, res) => {
 JobRouter.post('/JobSubmitForm', verifyToken, upload.single("resume"), async (req, res) => {
   const data = req.body;
   const files = req.file;
-  console.log('43 line userEmail ', data.email, req.email)
+  // console.log('43 line userEmail ',files)
   if (req.email !== data.email) {
     return res.status(500).send({ message: 'Unauthorize user ' })
   }
   const checkApply = await db.select().from(AppliedList).where(and(eq(AppliedList.Job_id, data.Job_id), eq(AppliedList.email, data.email)));
-
+  // console.log('checkApply::',checkApply)
   if (checkApply.length > 0) {
     return res.status(500).send({ message: 'You already applied this position' })
   }

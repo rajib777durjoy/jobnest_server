@@ -37,6 +37,7 @@ export const JobCollection= pgTable('JobCollection',{
     companyName:text('companyName').notNull(),
     salary:text("salary").notNull(),
     deadline:date("deadline"),
+    status:text('status').default("Panding"),
     description:text('description').notNull(),
     createdAt: timestamp("createdAt").defaultNow(),
 });

@@ -117,7 +117,7 @@ userRoute.put('/profileUpdate', upload.fields([
     })
     .where(eq(users_schema.email, email))  // or id
     .returning();
-  console.log('updateUser', updateUser)
+  // console.log('updateUser', updateUser)
   res.status(200).send(updateUser)
 
 })
@@ -125,7 +125,7 @@ userRoute.put('/profileUpdate', upload.fields([
 
 userRoute.get('/currentUser', verifyToken, async (req, res) => {
   const user_email = req.email;
-  console.log(user_email)
+  // console.log(user_email)
   if (user_email) {
     const getUser = await db.select().from(users_schema).where(eq(users_schema.email, user_email));
     console.log('currentuser::', getUser[0]);

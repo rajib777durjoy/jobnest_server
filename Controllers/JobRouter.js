@@ -3,10 +3,11 @@ import express from "express";
 import db from "../lib/psqlDB.js";
 import users_schema, { AppliedList, JobCollection, SaveJobs } from "../Model/schema.js";
 import verifyToken from "./Token/verifyToken.js";
-import { and, desc, eq, ilike, inArray, sql } from "drizzle-orm";
+import { and, desc, eq, ilike, inArray, ne, sql } from "drizzle-orm";
 import { upload } from "./multer.js";
 import fs from "fs"
 import imagekit from "./Imagekit/imagekit.js";
+import { adminVerify } from "./Token/verifyUser.js";
 
 const JobRouter = express.Router()
 
@@ -82,14 +83,7 @@ JobRouter.post('/JobSubmitForm', verifyToken, upload.single("resume"), async (re
   res.status(200).send({ success: 'Apply Successfull' });
 })
 
-//--------------- Recent Apply Job -------------//
-JobRouter.get('/Apply_jobs/:email', async (req, res) => {
-  const email = req.params.email;
-  // console.log("email:", email);
-  const Jobs = await db.select().from(AppliedList).where(eq(AppliedList?.email, email)).orderBy(desc(AppliedList?.createdAt)).limit(6);
-  // console.log('recent jobs::', Jobs)
-  res.status(200).send(Jobs);
-})
+
 
 // ------------ Apply_id join to job_id for get Job Details --------------//
 JobRouter.get('/applyDetails/:id', async (req, res) => {
@@ -110,7 +104,7 @@ JobRouter.get('/relevantJobs', verifyToken, async (req, res) => {
     .select()
     .from(JobCollection)
     .where(inArray(JobCollection.JobTitle, title));
-  console.log(Jobs)
+  // console.log(Jobs)
   res.status(200).send(Jobs)
 
 })

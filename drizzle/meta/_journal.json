@@ -169,6 +169,20 @@
       "when": 1763911729245,
       "tag": "0023_vengeful_blacklash",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1764077436477,
+      "tag": "0024_misty_flatman",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1764080316410,
+      "tag": "0025_tough_namorita",
+      "breakpoints": true
     }
   ]
 }

@@ -63,7 +63,7 @@ authRoute.post('/submitFrom', upload.single('profile'), async (req, res) => {
         password: hashPass,
         profile: photoUrl,
     }).returning();
-    console.log("ceregersfsfjsu::",createUser)
+    // console.log("ceregersfsfjsu::",createUser)
 
     const token = await genToken(createUser[0]?.email);
     console.log(token)
@@ -140,7 +140,7 @@ authRoute.post('/googleSignIn', async (req, res) => {
     console.log(name, email, photoUrl);
 
     const user_check = await db.select().from(users_schema).where(eq(users_schema.email, email));
-    console.log('user check::', user_check)
+    // console.log('user check::', user_check)
 
     if (user_check.length === 1) {
         const token = await genToken(user_check[0]?.email)

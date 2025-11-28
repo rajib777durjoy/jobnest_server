@@ -7,16 +7,17 @@ import { and, desc, eq, ilike, inArray, ne, sql } from "drizzle-orm";
 import { upload } from "./multer.js";
 import fs from "fs"
 import imagekit from "./Imagekit/imagekit.js";
-import { adminVerify } from "./Token/verifyUser.js";
+import {bothVerify } from "./Token/verifyUser.js";
 
 const JobRouter = express.Router()
 
 // Add job function allow for Employer not for Candidate //
 
-JobRouter.post('/Jobpost', verifyToken,upload.single('logo'), async (req, res) => {
+JobRouter.post('/Jobpost',verifyToken,bothVerify,upload.single('logo'), async (req, res) => {
   const email = req.email;
   const data = req.body;
   const JobData = { ...data, email };
+  console.log('Jobdatas::',JobData)
   const files = req.file;
   if (!files) {
     return res.status(500).send({ message: 'file is not found !' })
@@ -29,7 +30,7 @@ JobRouter.post('/Jobpost', verifyToken,upload.single('logo'), async (req, res) =
   fs.unlinkSync(files.path)
   JobData.logo= result?.url
   const StoreJobData = await db.insert(JobCollection).values(JobData).returning();
-  //  console.log("StoreJobData",StoreJobData)
+   console.log("StoreJobData",StoreJobData)
   res.send(StoreJobData)
 });
 
@@ -48,6 +49,7 @@ JobRouter.get('/details/:id', async (req, res) => {
   res.send(query)
 })
 
+// Job apply releted api  function //
 JobRouter.post('/JobSubmitForm', verifyToken, upload.single("resume"), async (req, res) => {
   const data = req.body;
   const files = req.file;

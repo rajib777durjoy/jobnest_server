@@ -20,6 +20,18 @@ adminRouter.get('/usersList/:email', verifyToken, adminVerify, async (req, res) 
   res.send(query)
 })
 
+// User Delete related api //
+adminRouter.delete('/userRemove/:id',async(req,res)=>{
+  const {id} = Number(req.params);
+  console.log(id , typeof id);
+  if(!id){
+    return res.status(500).send({message:'user id is undefind'})
+  }
+  const remove_user= await db.delete(users_schema).where(eq(users_schema.id,id)).returning();
+  console.log(remove_user);
+  res.status(200).send({message:'successfull'})
+})
+
 adminRouter.get('/singleUser/:id', async (req, res) => {
   const id = Number(req.params.id);
   console.log(id);
@@ -49,6 +61,13 @@ adminRouter.get('/postjobs', verifyToken, adminVerify, async (req, res) => {
   res.status(200).send(Jobs);
 })
 
+adminRouter.get('/JobDetails/:id',async(req,res)=>{
+  const {id} = req.params;
+  const singleJob= await db.select().from(JobCollection).where(eq(JobCollection.Job_id,id));
+  console.log("singleJob:::",singleJob);
+  res.status(200).send(singleJob)
+})
+
 adminRouter.get('/Alljob',verifyToken,adminVerify,async(req,res)=>{
   const email= req.email;
   const Jobs= await db.select().from(JobCollection).where(ne(JobCollection?.email,email));
@@ -63,7 +82,7 @@ adminRouter.patch('/update_status/:Job_id', verifyToken, adminVerify, async (req
   if (status === "" && Job_id === 0) {
     return res.status(500).send({ message: 'status or Job_id Undifind ! please check your status and Job_id' })
   }
-  const update_status = await db.update(JobCollection).set({ status }).where(eq(JobCollection?.Job_id, Job_id));
+  const update_status = await db.update(JobCollection).set({ status}).where(eq(JobCollection?.Job_id, Job_id));
   // console.log("update status successfull::", update_status)
   
   res.send({ message: 'update successfull' })

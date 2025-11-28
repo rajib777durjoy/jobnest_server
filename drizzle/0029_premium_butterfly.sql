@@ -1,0 +1,1 @@
+ALTER TABLE "appliedList" ADD COLUMN "working_time" text;

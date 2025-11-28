@@ -1,0 +1,1 @@
+ALTER TABLE "JobCollection" ADD COLUMN "working_time" text;

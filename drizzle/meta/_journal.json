@@ -183,6 +183,41 @@
       "when": 1764080316410,
       "tag": "0025_tough_namorita",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1764166969397,
+      "tag": "0026_chunky_adam_destine",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1764313069380,
+      "tag": "0027_smart_the_phantom",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1764313317413,
+      "tag": "0028_hesitant_harrier",
+      "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1764316750699,
+      "tag": "0029_premium_butterfly",
+      "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1764316838413,
+      "tag": "0030_freezing_mole_man",
+      "breakpoints": true
     }
   ]
 }

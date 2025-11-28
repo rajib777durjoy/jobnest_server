@@ -1,0 +1,1 @@
+ALTER TABLE "JobCollection" ALTER COLUMN "activity" SET DEFAULT 'true';

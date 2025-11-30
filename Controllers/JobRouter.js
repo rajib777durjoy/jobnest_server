@@ -57,7 +57,7 @@ JobRouter.post('/JobSubmitForm', verifyToken, upload.single("resume"), async (re
   if (req.email !== data.email) {
     return res.status(500).send({ message: 'Unauthorize user ' })
   }
-  const checkApply = await db.select().from(AppliedList).where(and(eq(AppliedList.Job_id, data.Job_id), eq(AppliedList.email, data.email)));
+  const checkApply = await db.select().from(AppliedList).where(and(eq(AppliedList.Job_id, data.Job_id),eq(AppliedList.email, data.email)));
   // console.log('checkApply::',checkApply)
   if (checkApply.length > 0) {
     return res.status(500).send({ message: 'You already applied this position' })

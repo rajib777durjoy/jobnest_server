@@ -218,6 +218,20 @@
       "when": 1764316838413,
       "tag": "0030_freezing_mole_man",
       "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1764425069003,
+      "tag": "0031_superb_patch",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1764516901805,
+      "tag": "0032_small_galactus",
+      "breakpoints": true
     }
   ]
 }

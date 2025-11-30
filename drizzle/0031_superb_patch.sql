@@ -1,0 +1,1 @@
+ALTER TABLE "appliedList" ADD COLUMN "ownerEmail" varchar NOT NULL;

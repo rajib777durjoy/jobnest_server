@@ -232,6 +232,13 @@
       "when": 1764516901805,
       "tag": "0032_small_galactus",
       "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1764607025640,
+      "tag": "0033_volatile_boomerang",
+      "breakpoints": true
     }
   ]
 }

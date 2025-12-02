@@ -1,0 +1,1 @@
+ALTER TABLE "JobCollection" ADD COLUMN "applyCount" integer DEFAULT 0;

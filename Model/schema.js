@@ -37,6 +37,7 @@ export const JobCollection= pgTable('JobCollection',{
     experience:text('experience'),
     companyName:text('companyName').notNull(),
     salary:text("salary").notNull(),
+    applyCount:integer('applyCount').default(0),
     deadline:date("deadline"),
     status:text('status').default("Panding"),
     activity:text('activity').default('true'),

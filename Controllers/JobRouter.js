@@ -17,7 +17,7 @@ JobRouter.post('/Jobpost',verifyToken,bothVerify,upload.single('logo'), async (r
   const email = req.email;
   const data = req.body;
   const JobData = { ...data, email };
-  console.log('Jobdatas::',JobData)
+  // console.log('Jobdatas::',JobData)
   const files = req.file;
   if (!files) {
     return res.status(500).send({ message: 'file is not found !' })
@@ -81,6 +81,11 @@ JobRouter.post('/JobSubmitForm', verifyToken, upload.single("resume"), async (re
   const ApplyData = { ...data, resume: result.url }
   // store applyData in psql database using drizzle.orm //
   const store = await db.insert(AppliedList).values(ApplyData).returning()
+ if (!store || store.length === 0) {
+  return res.status(500).send({ message: 'Job apply error' });
+}
+ const updateApplyCount = await db.update(JobCollection).set({applyCount:sql`${JobCollection.applyCount} + 1`}).where(eq(JobCollection.Job_id,Number(data.Job_id))).returning()
+
   // console.log('drizzle response::', store)
   res.status(200).send({ success: 'Apply Successfull' });
 })

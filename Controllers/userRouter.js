@@ -51,7 +51,7 @@ userRoute.put('/profileUpdate', upload.fields([
       })
       .where(eq(users_schema.email, email))  // or id
       .returning();
-    console.log('updateUser', updateUser)
+    // console.log('updateUser', updateUser)
     return res.status(200).send(updateUser);
   }
 
@@ -75,7 +75,7 @@ userRoute.put('/profileUpdate', upload.fields([
       })
       .where(eq(users_schema.email, email))
       .returning();
-    console.log('updateUser', updateUser)
+    // console.log('updateUser', updateUser)
     return res.status(200).send(updateUser)
   }
 
@@ -100,7 +100,7 @@ userRoute.put('/profileUpdate', upload.fields([
       })
       .where(eq(users_schema.email, email))  // or id
       .returning();
-    console.log('updateUser', updateUser)
+    // console.log('updateUser', updateUser)
    return res.status(200).send(updateUser)
 
   }
@@ -128,12 +128,10 @@ userRoute.get('/currentUser', verifyToken, async (req, res) => {
   // console.log(user_email)
   if (user_email) {
     const getUser = await db.select().from(users_schema).where(eq(users_schema.email, user_email));
-    console.log('currentuser::', getUser[0]);
+    // console.log('currentuser::', getUser[0]);
     return res.status(200).send(getUser[0])
   }
   res.send({ null: null })
-
-
 })
 
 // user profile management function ///
@@ -143,7 +141,7 @@ userRoute.post('/profile/management', verifyToken,
     const user = req.body;
     const verifyemail = req.email;
     const image = req.files;
-    console.log('image::', image);
+    // console.log('image::', image);
     const store = await db.update(users_schema).set({})
     res.send(user)
 

@@ -239,6 +239,20 @@
       "when": 1764607025640,
       "tag": "0033_volatile_boomerang",
       "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1765029277316,
+      "tag": "0034_chief_stranger",
+      "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "7",
+      "when": 1765129828827,
+      "tag": "0035_tricky_skrulls",
+      "breakpoints": true
     }
   ]
 }

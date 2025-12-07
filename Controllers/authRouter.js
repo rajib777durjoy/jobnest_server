@@ -66,7 +66,7 @@ authRoute.post('/submitFrom', upload.single('profile'), async (req, res) => {
     // console.log("ceregersfsfjsu::",createUser)
 
     const token = await genToken(createUser[0]?.email);
-    console.log(token)
+    // console.log(token)
 
     if (!token) {
         return res.status(401).send({ message: 'token generate failed' })
@@ -85,7 +85,7 @@ authRoute.post('/signIn', async (req, res) => {
     const { email, password } = req.body;
     // console.log("email::", email, password)
     if (!validator.isEmail(email)) {
-        console.log('email is not validate::')
+        // console.log('email is not validate::')
         return res.status(404).send({ message: 'Invalid email format' })
     }
 
@@ -104,7 +104,7 @@ authRoute.post('/signIn', async (req, res) => {
     }
 
     const token = await genToken(user_check[0].email);
-    console.log(token)
+    // console.log(token)
 
     if (!token) {
         return res.status(401).send({ message: 'token generate failed' })
@@ -137,7 +137,7 @@ authRoute.post('/signOut/:email', verifyToken, async (req, res) => {
 
 authRoute.post('/googleSignIn', async (req, res) => {
     const { name, email, photoUrl } = req.body;
-    console.log(name, email, photoUrl);
+    // console.log(name, email, photoUrl);
 
     const user_check = await db.select().from(users_schema).where(eq(users_schema.email, email));
     // console.log('user check::', user_check)
@@ -152,7 +152,7 @@ authRoute.post('/googleSignIn', async (req, res) => {
         }).send(user_check[0])
     }
     const createUser = await db.insert(users_schema).values({ name, email, profile: photoUrl }).returning();
-    console.log(createUser[0]?.email)
+    // console.log(createUser[0]?.email)
     const token = await genToken(createUser[0]?.email)
     res.status(200).cookie("token", token, {
         httpOnly: true,

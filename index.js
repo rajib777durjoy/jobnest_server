@@ -10,19 +10,27 @@ import rateLimit from 'express-rate-limit';
 import JobRouter from "./Controllers/JobRouter.js";
 import adminRouter from "./Controllers/adminRouter.js";
 import employerRoute from "./Controllers/employerRouter.js";
+import { SocketConnect } from "./Controllers/SocketHandler/SocketConnect.js";
+import { Server } from "socket.io";
+import http from "http"; 
+
+
 
 const limiter = rateLimit({
   windowMs: 60 * 1000, 
   max: 10, 
   message: "Too many requests, please try again later."
 });
+
 const app = express();
 const port = process.env.PORT || 7000;
 app.use(limiter);
+
 app.use(cors({
     origin:['http://localhost:3000','http://localhost:3001'],
     credentials:true
 }))
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -37,7 +45,18 @@ app.get('/',(req,res)=>{
 res.send('server is running')
 })
 
+const server = http.createServer(app);
+  export const io = new Server(server, {
+  cors: {
+    origin: ["http://localhost:3000", "http://localhost:3001"],
+    methods: ["GET", "POST",'PUT','PATCH'],
+    credentials: true,
+  },
+});
 
-app.listen(port,()=>{
-    console.log('server is runing on this port',port)
-})
+SocketConnect(io)
+
+
+server.listen(port, () => {
+  console.log("Server with Socket.io running on port", port);
+});

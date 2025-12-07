@@ -21,9 +21,9 @@ employerRoute.get('/queryRecentJobs/:email', verifyToken, employerVerify, async 
 
 employerRoute.patch('/changeActivity/:id/:active', verifyToken, employerVerify, async (req, res) => {
     const { id, active } = req.params;
-    console.log(id, active)
+    // console.log(id, active)
     const updateAcitivity = await db.update(JobCollection).set({ activity: active }).where(eq(JobCollection.Job_id, id));
-    console.log('update', updateAcitivity)
+    // console.log('update', updateAcitivity)
     res.status(200).send({ message: 'updateSuccessfull' })
 })
 
@@ -166,6 +166,16 @@ employerRoute.get('/Joblist', verifyToken, employerVerify, async (req, res) => {
     });
 
 
+});
+
+// remove job //
+employerRoute.delete('/remove_job/:id',verifyToken,employerVerify, async (req, res) => {
+    const { id } = req.params;
+    const remove = await db.delete(JobCollection).where(eq(JobCollection.Job_id, id)).returning();
+    if (remove.length === 0) {
+        return res.status(500).send({ message: 'delete Unsuccessful' })
+    }
+    res.status(200).send({ message: 'delete successfull' });
 });
 
 

@@ -23,18 +23,18 @@ adminRouter.get('/usersList/:email', verifyToken, adminVerify, async (req, res) 
 // User Delete related api //
 adminRouter.delete('/userRemove/:id',async(req,res)=>{
   const {id} = Number(req.params);
-  console.log(id , typeof id);
+  // console.log(id , typeof id);
   if(!id){
     return res.status(500).send({message:'user id is undefind'})
   }
   const remove_user= await db.delete(users_schema).where(eq(users_schema.id,id)).returning();
-  console.log(remove_user);
+  // console.log(remove_user);
   res.status(200).send({message:'successfull'})
 })
 
 adminRouter.get('/singleUser/:id', async (req, res) => {
   const id = Number(req.params.id);
-  console.log(id);
+  // console.log(id);
   const singleUser = await db.select().from(users_schema).where(eq(users_schema.id, id));
   // console.log(singleUser);
   res.status(200).send(singleUser[0]);
@@ -64,21 +64,21 @@ adminRouter.get('/postjobs', verifyToken, adminVerify, async (req, res) => {
 adminRouter.get('/JobDetails/:id',async(req,res)=>{
   const {id} = req.params;
   const singleJob= await db.select().from(JobCollection).where(eq(JobCollection.Job_id,id));
-  console.log("singleJob:::",singleJob);
+  // console.log("singleJob:::",singleJob);
   res.status(200).send(singleJob)
 })
 
 adminRouter.get('/Alljob',verifyToken,adminVerify,async(req,res)=>{
   const email= req.email;
   const Jobs= await db.select().from(JobCollection).where(ne(JobCollection?.email,email));
-  console.log(Jobs);
+  // console.log(Jobs);
   res.status(200).send(Jobs);
 })
 
 adminRouter.patch('/update_status/:Job_id', verifyToken, adminVerify, async (req, res) => {
   const Job_id = req.params?.Job_id;
   const status = req.query.status;
-  console.log(status, Job_id);
+  // console.log(status, Job_id);
   if (status === "" && Job_id === 0) {
     return res.status(500).send({ message: 'status or Job_id Undifind ! please check your status and Job_id' })
   }
@@ -93,7 +93,7 @@ adminRouter.delete('/JobDelete/:Job_id',verifyToken,adminVerify,async(req,res)=>
   const email = req.body?.email;
   const verifyemail= req.email;
   const Job_id = Number(req.params?.Job_id);
-  console.log('id and email::',Job_id, email)
+  // console.log('id and email::',Job_id, email)
   if(email !== verifyemail){
     return res.status(403).send({message:'Unauthorize Access !'})
   }
@@ -108,7 +108,7 @@ adminRouter.delete('/JobDelete/:Job_id',verifyToken,adminVerify,async(req,res)=>
 adminRouter.get('/applications',verifyToken,adminVerify,async(req,res)=>{
   const email = req.email;
   const applicationList= await db.select().from(AppliedList).where(ne(AppliedList.email,email)).orderBy(desc(AppliedList.createdAt)).limit(6);
-  console.log('applications::',applicationList)
+  // console.log('applications::',applicationList)
   res.status(200).send(applicationList);
 })
 

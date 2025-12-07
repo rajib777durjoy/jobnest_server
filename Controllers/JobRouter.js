@@ -30,7 +30,7 @@ JobRouter.post('/Jobpost',verifyToken,bothVerify,upload.single('logo'), async (r
   fs.unlinkSync(files.path)
   JobData.logo= result?.url
   const StoreJobData = await db.insert(JobCollection).values(JobData).returning();
-   console.log("StoreJobData",StoreJobData)
+  //  console.log("StoreJobData",StoreJobData)
   res.send(StoreJobData)
 });
 
@@ -123,7 +123,7 @@ JobRouter.post('/savejob', async (req,res) => {
     return res.status(400).send({ message: "Job_id and user_id are required" });
   }
   const query = await db.select().from(SaveJobs).where(and(eq(SaveJobs?.Job_id, Job_id),eq(SaveJobs?.user_id,user_id)));
-  console.log('save job query::', query)
+  // console.log('save job query::', query)
   if(query.length > 0) {
     return res.status(500).send({ message: 'This job already saved' })
   };
@@ -134,9 +134,9 @@ JobRouter.post('/savejob', async (req,res) => {
 // Get save job list  related api functionality //
 JobRouter.get('/saveJoblist/:id',async(req,res)=>{
   const id = req.params?.id;
-  console.log('savePagersdfsdfds;',id)
+  // console.log('savePagersdfsdfds;',id)
   const query = await db.select().from(SaveJobs).where(eq(SaveJobs.user_id,id));
-  console.log('save job list::',query);
+  // console.log('save job list::',query);
   res.status(200).send(query);
 })
 
